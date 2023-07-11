@@ -1,8 +1,23 @@
-// Electron 主进程 与 渲染进程 交互的桥梁
-const { contextBridge } = require("electron");
+// Electron 主进程 与 渲染进程 互相交互的桥梁
+const { contextBridge, ipcRenderer } = require("electron");
 
 
-// 在window对象下导出只读对象
-contextBridge.exposeInMainWorld("plugin_template", {
-
+contextBridge.exposeInMainWorld("config_view", {
+    getDisabledList: () => ipcRenderer.invoke(
+        "LiteLoader.config_view.getDisabledList"
+    ),
+    setDisabledList: list => ipcRenderer.invoke(
+        "LiteLoader.config_view.setDisabledList",
+        list
+    ),
+    showPickDirDialog: () => ipcRenderer.invoke(
+        "LiteLoader.config_view.showPickDirDialog"
+    ),
+    setProfilePath: path => ipcRenderer.invoke(
+        "LiteLoader.config_view.setProfilePath",
+        path
+    ),
+    quit: () => ipcRenderer.send(
+        "LiteLoader.config_view.quit"
+    )
 });
