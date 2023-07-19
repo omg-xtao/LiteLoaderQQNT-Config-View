@@ -14,6 +14,9 @@ function onLoad(plugin, liteloader) {
                 const data = fs.readFileSync(config_path, "utf-8");
                 const config = JSON.parse(data);
                 const disabled_list = config?.disabled;
+                if (!Array.isArray(disabled_list)) {
+                    return [];
+                }
                 return disabled_list;
             }
             catch (error) {
